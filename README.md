@@ -1,5 +1,7 @@
 # Software-Design-Project
 
+The following projects have all been coded in MATLAB. 
+
 We are students at the Ohio State University studying engineering. We have taken it
 upon ourselves to create a simple game that will create relief after long hours of 
 studying and doing homework. We have worked hard this year to refine our skills to 
