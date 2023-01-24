@@ -1,0 +1,41 @@
+%% Guess A Number Game
+% Description: This game will generate a random number and prompt the user
+% to guess it.
+%
+% Group G
+% Abdullah Madani, Feras Akileh, Brandon Fernandez Castro, Ali Issa
+
+clear
+clc
+% assaign a random number for x
+x=randi(50);
+% ask user if they want to play with option to decline
+user=questdlg('Hello! welcome to the game Guess The Number. would you like to play?');
+if user=='Yes' % if player said yes start the game
+     y=inputdlg('Guess the number between 1 to 50 '); % ask user to input number
+     z= str2double( y ); 
+     
+     while z~=x % use while statement if the number user chose ~= random #
+         if isempty(z) % if user decided to quit game
+             return
+         
+         elseif z<x % ask user to try again when the number user chose is <
+             y=inputdlg('try again. the number is too low');
+             z= str2double( y );
+
+         else z>x % ask user to try again when the number user chose is >
+             y=inputdlg('try again. the number is too high');
+             z= str2double( y );
+         
+
+         end
+         
+     end
+     if z==x  
+             msgbox('Congratulations! you guessed the right number'); % display winning box msg
+     end
+elseif user=='No' % if user decided not to play
+    return    
+else isempty(z) % if user pressed cancel game
+             return   
+end
