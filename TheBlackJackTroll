@@ -1,0 +1,311 @@
+%% The Blackjack Troll
+% Software Design Project
+% Description: The following program is a game titled The Blackjack Troll.
+% The game is a spin off of the classic card game. It plays the same as the
+% classic game but adds a story element centered around a troll who hides
+% under a bridge and doesn't allow anyone to pass unless they play a game
+% of blackjack.
+%
+% Group G
+% Feras Akileh, Abdullah Madani, Brandon Fernandez Castro, Ali Issa
+clear
+clc
+
+%prints a welcome message
+fprintf('The Blackjack Troll\nWelcome!\n');
+
+%prompts the player for their name
+playerName = input('Please enter a player name: ','s');
+
+%prints a hello message
+fprintf('\nHello %s!\n', playerName);
+
+%prompts the user to see if they'd like to play
+playChoice = input('Would you like to play?\nType Y to play and Q to quit:','s');
+
+%initializes responses for whether the player would like to play
+play = 'Y';
+play2 = 'y';
+quit = 'Q';
+quit2 = 'q';
+
+%initializes win variables for troll and player
+playerWins = 0;
+trollWins = 0;
+
+%establishes player coin count
+playerCoins = 20;
+
+%creates a variable that dictates whether to print final scores depending
+%on if user decides to play
+playCount = 0;
+
+%prints feedback is user does not want to play
+if (playChoice==quit || playChoice==quit2)
+    fprintf('Can''t take it? Too Bad.');
+end
+
+%creates a loop for if user enters an invalid response
+while (playChoice~=play && playChoice~=play2 && playChoice~=quit && playChoice~=quit2)
+        fprintf('That is an invalid input! Please try again.\n\n');
+
+        playChoice = input('Would you like to play?\nType Y to play and Q to quit:','s');
+end
+
+%creates an if statement with a while loop inside that starts the game
+%based on user response
+if ((playChoice==play || playChoice==play2))
+
+    playCount = 1;
+
+while (playChoice==play || playChoice==play2)
+
+
+    %creates a vector of shuffled card values
+        cardValues = zeros(1,52);
+
+        for idx=1:52
+            cardValues(idx)=(randi(11));
+        end
+
+    %prints story aspect of the game
+    fprintf(['\nOnce upon a time in a faraway kingdom, there lived a grumpy troll\n' ...
+        'under a bridge. The troll guarded the bridge and\nand made sure that no' ...
+        'one would cross the bridge\nunless they played a game of blackjack.\n\n' ...
+        'A traveler named %s was making their way towards the royal palace\n' ...
+        'when all of a sudden, they were stopped by the troll.'],playerName);
+
+    %prompts the user to display the next part of the story
+    input('\n\nPress any key to display the next prompt:','s');
+
+    %more story printing to the screen
+    fprintf('\n"Halt!" the troll yelled. \n        %s stopped dead in their tracks', playerName);
+
+    %prompts the user to display the next part of the story
+    input('\n\nPress any key to display the next prompt:','s');
+
+    %more story printing to the screen
+    fprintf(['\n"You may not pass until you play me in blackjack! If I win,\n' ...
+        'you have to give up some of your coins, if you win, you may cross\nthe bridge! Ready to play?"']);
+
+    %prompts the user to display the next part of the story
+    input('\n\nPress any key to display the next prompt:','s');
+
+    %more story printing to the screen and explanation of rules
+    fprintf(['\n"I will begin by giving you two cards! If the sum of those cards\nexceed ' ...
+        '21 then you immediately lose the game. However, if\nthey do not, you may ask for another card, but if that card\n' ...
+        'makes your cards exceed 21, then you lose. Once you''re done,\nI will reveal my cards, and whoever is closest to 21\n' ...
+        'will win the game." Said the troll.\n\n']);
+
+        %prints amount of coins user has
+        fprintf('%s currently has %.f coins!',playerName,playerCoins);
+
+        %prompts the user for a bet amount
+        playerBet = input('\nPlace your bet for this round: $');
+
+     %creates a while loop for when the user submits an invalid response   
+     while (playerBet <= 0 || playerBet > playerCoins || playerBet == ' ')
+                if (playerBet > playerCoins)
+                    fprintf('\nTry betting coins you actually have!')
+                    playerBet = input('\nPlace your bet for this round: $');
+                elseif (playerBet < 0)
+                    fprintf('\nNice try! You can''t bet negative coins!');
+                    playerBet = input('\nPlace your bet for this round: $');
+                elseif (playerBet == 0)
+                    fprintf('\nThe troll will not accept a bet of zero! Are you crazy?');
+                    playerBet = input('\nPlace your bet for this round: $');
+                elseif (playerBet == "")
+                    fprintf('\nHow about you bet a number?');
+                    playerBet = input('\nPlace your bet for this round: $');
+                end
+    end
+
+    %prompts the user to enter a key to get their cards
+    input('\n\nPress any key to get your cards:','s');
+
+    %deals user their first two cards
+    card1 = cardValues(1);
+    card2 = cardValues(2);
+
+    %calculates sum of their current hand
+    handSum = card1+card2;
+
+    %prints to the user their card values
+    fprintf('\n\nYour first card has a value of %.f \nYour second card has a value of %.f\n\n', card1,card2);
+
+    %creates a vector for the player's current deck
+    playerDeck = zeros(1,52);
+    playerDeck(1) = cardValues(1);
+    playerDeck(2) = cardValues(2);
+
+    %creates a vector for the troll's current deck
+    trollDeck = zeros(1,52);
+    trollDeck(1) = cardValues(3);
+    trollDeck(2) = cardValues(4);
+
+    %initialized the troll's first two cards as variables
+    trollCard1 = cardValues(3);
+    trollCard2 = cardValues(4);
+
+    %calculates the value of the troll's hand
+    trollHandSum = trollCard1+trollCard2;
+
+    %prints the sum of the user's hand
+    fprintf('The sum of your cards is currently %.f!\n\n', handSum);
+            
+
+        %prompts the user to take another card
+        if (trollHandSum <= 21 && handSum <= 21)
+            fprintf('The sum of your cards is less than 21.\n\n"We can either take another card or we can reveal \nour cards and see who wins!" said the troll.\n\n');
+
+            %prints to the user the directions
+            fprintf('To take another card, enter the letter ''A''\nTo reveal your hand, enter the letter ''H''\n');
+
+            %initializes player responses
+            take = 'A';
+            take2 = 'a';
+
+            reveal = 'H';
+            reveal2 = 'h';
+
+
+            %initializes index values for dealing more cards to the troll
+            %and the user
+            count = 5;
+
+            playerIdx = 3;
+            trollIdx = 3;
+
+            %prints to the user to get their choice
+            cardChoice = input('What would you like to do? ','s');
+
+            %creates a while loop that will continue to ask the user if
+            %they want more cards until they reach a sum of 21 or higher
+            %where it will finish the loop and print it's time to reveal
+            %the decks of the troll and the player
+            while (cardChoice==take || cardChoice==take2)
+
+                fprintf('\n\nYou chose to take another card!\n');
+
+                %gets value of next card
+                nextCard = cardValues(count);
+
+                %deals the card
+                playerDeck(playerIdx) = nextCard;
+
+                %calculates new sum of user's hand
+                handSum = handSum + nextCard;
+
+                %prints the new sum 
+                fprintf('The value of your new card is %.f!\nThe sum of your hand is now %.f!\n', nextCard, handSum);
+
+                fprintf('\nThe troll takes a card!\n');
+
+                playerIdx = playerIdx+1;
+
+                %indexes the cards for dealer
+                count = count + 1;
+
+                %gets value of next card
+                nextCard = cardValues(count);
+
+                %deals the card
+                trollDeck(trollIdx) = nextCard;
+
+                trollIdx = trollIdx+1;
+
+                %calculates new sum of troll's hand
+                trollHandSum = trollHandSum+nextCard;
+
+                %indexes the card for dealer
+                count = count + 1;
+
+                %breaks while loop if user's hand is larger than 21
+                if handSum>21
+                    break;
+                end
+
+                %prompts the user if they want to take another card
+               fprintf('\nTo take another card, enter the letter ''A''\nTo reveal your hand, enter the letter ''H''\n ');
+               cardChoice = input('What would you like to do? ','s');
+           
+            end
+        end
+        
+
+           
+                %reveals the cards
+                fprintf('\n\nIt is time to reveal the cards!\n');
+
+                input('Press the enter key to reveal the cards\n','s');
+
+                fprintf('The sum of your cards is %.f!\n', handSum);
+
+                fprintf('The sum of the troll''s cards is %.f!\n', trollHandSum);
+
+        %prints winning messages based on game
+        if (trollHandSum==21)
+            fprintf('The troll wins this one! Give up your coins and do not cross the bridge!')
+            trollWins = trollWins+1;
+        elseif (handSum==21)
+            fprintf('Perfect 21! You won this round! Cross the bridge and keep those coins!')
+            playerWins = playerWins+1;
+        elseif (trollHandSum > 21 && trollHandSum~=handSum && handSum~=21)
+            fprintf('\nThe troll lost, you won this round! You may cross the bridge!\n\n');
+            fprintf('"Oh no! my cards equal to greater than 21! You win this one, \nkeep your coins and cross the bridge!" Said the troll');
+            playerWins = playerWins + 1;
+        elseif (handSum > 21 && trollHandSum~=handSum && trollHandSum~=21)
+            fprintf('\nYou lost, the Troll wins this one!');
+            fprintf(['\nThe sum of your cards is greater than 21!\n\n"Haha! You lose!" the troll laughed\n' ...
+            '      "Now give me those coins and leave!" said the troll.\n\n%s has lost the game. Thanks for Playing!\n'],playerName);
+            playerCoins = playerCoins - playerBet;
+            trollWins = trollWins + 1;
+        elseif (handSum>21 && trollHandSum>21)
+            fprintf('\nWow, both you and the troll lost. How embarassing!');
+        elseif (trollHandSum > handSum)
+            fprintf('\nThe Troll''s hand was worth more so the troll wins this one!');
+            playerCoins = playerCoins - playerBet;
+            trollWins = trollWins + 1;
+        elseif (handSum > trollHandSum)
+            fprintf('\nYour hand was worth more so you win this one! You may cross the bridge!');
+            playerWins = playerWins + 1;
+        elseif (handSum == trollHandSum && handSum<21 && trollHandSum<21)
+            fprintf('\nThere seems to be a tie, you must give up your bet but you may also cross the bridge!');
+        end
+
+        %asks user if they want to play again if they have enough coins
+        if(playerCoins >= 0)
+        
+        playChoice = input('\n\nWould you like to play another round?\nType Y to play and Q to quit ', 's');
+        
+        %creates while loop for if user enters an invalid response
+        while (playChoice~=play && playChoice~=play2 && playChoice~=quit && playChoice~=quit2)
+            fprintf('\nThat is not a valid input, please try again.');
+            playChoice = input('\nWould you like to play another round?\nType Y to play and Q to quit ', 's');
+        end
+        end
+
+               
+end
+end
+
+%prints final scores if user ever played the game
+if playCount == 1
+
+fprintf('\nThe Blackjack Troll\n    Final Scores:')
+fprintf('\nYou finished the game with %.f coins!\n', playerCoins); 
+fprintf('\nYou won %.f round(s).', playerWins);
+fprintf('\nThe troll won %.f round(s).', trollWins);
+
+
+if (playerWins > trollWins)
+    fprintf('\n%s won the most rounds! Congratulations!\n', playerName);
+elseif (playerWins == trollWins)
+    fprintf('\nThe result was a tie! That''s kind of boring.\n');
+else
+    fprintf('\nThe troll bested you! Haha you got beat by a computer!\n');
+end
+
+fprintf('\nGoodbye! Thank you for playing our game!');
+
+end
